@@ -1,0 +1,23 @@
+ID:3508001
+selected courses:
+22001
+22002
+22003
+
+ID:3508002
+selected courses:
+22001
+22002
+22004
+
+ID:3508003
+selected courses:
+22001
+22003
+22004
+
+ID:3508004
+selected courses:
+22002
+22003
+22004

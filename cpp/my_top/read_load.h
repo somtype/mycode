@@ -1,0 +1,1 @@
+int read_load(double &l_1, double &l_5, double &l_15); //读取负载
