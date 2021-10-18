@@ -1,4 +1,12 @@
 {
     "workbench.sideBar.location": "right",
-    "clang-format.executable": "clang-format-12"
+    "editor.acceptSuggestionOnEnter": "off",
+    "editor.formatOnSave": false,
+    "editor.formatOnType": true,
+    "editor.fontFamily": "Fira Code",
+    "editor.fontSize": 16,
+    "editor.detectIndentation": false,
+    "terminal.integrated.fontSize": 15,
+    "clang-format.executable": "/usr/bin/clang-format-12",
+    "vim.useCtrlKeys": false,
 }
