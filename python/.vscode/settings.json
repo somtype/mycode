@@ -8,5 +8,6 @@
     "vim.useCtrlKeys": false,
     "jupyter.jupyterServerType": "local",
     "editor.acceptSuggestionOnEnter": "off",
-    "jupyter.ignoreVscodeTheme": false
+    "jupyter.ignoreVscodeTheme": false,
+    "python.defaultInterpreterPath": "~/miniconda3/envs/STofEnv/bin/python"
 }
