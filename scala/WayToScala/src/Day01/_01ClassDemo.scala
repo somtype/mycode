@@ -1,4 +1,4 @@
-package com.itheima.scala.oop
+package Day01
 
 object _01ClassDemo {
   //创建类

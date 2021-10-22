@@ -1,4 +1,4 @@
-package com.itheima.scala.oop
+package Day01
 
 object _Hello {
   def main(args: Array[String]): Unit = {
