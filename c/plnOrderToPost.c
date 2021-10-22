@@ -1,5 +1,5 @@
-/*³ÌĞò¹¦ÄÜ£º½«ÖĞ×º±í´ïÊ½×ª»»Îªºó×º±í´ïÊ½µÄ·­ÒëÆ÷
-  Ô­Ê¼ÎÄ·¨ÃèÊö£º
+/*ç¨‹åºåŠŸèƒ½ï¼šå°†ä¸­ç¼€è¡¨è¾¾å¼è½¬æ¢ä¸ºåç¼€è¡¨è¾¾å¼çš„ç¿»è¯‘å™¨
+  åŸå§‹æ–‡æ³•æè¿°ï¼š
            expr --> expr + term
                   | expr - term
                   | term
@@ -10,29 +10,30 @@
                   | ID
                   | NUM
 
-  Ïû³ı×óµİ¹éºóµÄÓï·¨ÖÆµ¼µÄ·­Òë·½°¸£º
+  æ¶ˆé™¤å·¦é€’å½’åçš„è¯­æ³•åˆ¶å¯¼çš„ç¿»è¯‘æ–¹æ¡ˆï¼š
             expr --> term expr_rest
        expr_rest --> + term {print('+')} expr_rest
                    | - term {print('-')} expr_rest
-                   | ¿Õ
+                   | ç©º
             term --> factor term_rest
        term_rest --> * factor {print('*')} term_rest
                    | / factor {print('/')} term_rest
-                   | ¿Õ
+                   | ç©º
           factor --> ( {print('(')} expr ) {print(')')}
                    | NUM {print(value_of_token)}
                    | ID  {print(lexeme)}
 */
+#include <ctype.h>
 #include <stdio.h>
-#include<stdlib.h>
-#include<ctype.h>
+#include <stdlib.h>
 
 #define TKN_NUM 973
 #define TKN_ID 397
 
-int numOfleft = 0;//´ıÆ¥ÅäµÄ×óÀ¨ºÅµÄ¸öÊı£¬ÓÃÓÚÆ¥ÅäÀ¨ºÅ
-int LookAhead; //´æ·Åµ±Ç°µÄ´Ê·¨µ¥ÔªµÄÀàĞÍ
-int tokenval = 0; char lexeme[1024];
+int numOfleft = 0; //å¾…åŒ¹é…çš„å·¦æ‹¬å·çš„ä¸ªæ•°ï¼Œç”¨äºåŒ¹é…æ‹¬å·
+int LookAhead;     //å­˜æ”¾å½“å‰çš„è¯æ³•å•å…ƒçš„ç±»å‹
+int tokenval = 0;  //å­˜æ”¾TKN_NUMçš„å€¼ï¼ˆæ•´æ•°ï¼‰
+char lexeme[1024]; //å­˜æ”¾TNK_IDçš„å€¼ï¼ˆå˜é‡åï¼‰
 
 void expr();
 void expr_rest();
@@ -40,153 +41,156 @@ void term();
 void term_rest();
 void factor();
 
-int GetToken()
-{
-	int t, i;
-	while (1) {
-		t = getchar();
-		if (t == ' ' || t == '\t')
-            //tokenÊÇ¿Õ¸ñ»òÖÆ±í·û£¬ºöÂÔ
-			;
-		else if (isdigit(t)) {
-		    //tokenÊÇÎŞ·ûºÅÕûÊı(TKN_NUM)£¬»ñÈ¡Ëü¾ßÌåµÄÖµ£¬È»ºó´æÈëtokenval
-			tokenval = 0;
-			do {
-				tokenval = tokenval * 10 + t - '0';
-				t = getchar();
-			} while (isdigit(t));
-            //ÔÚTKN_NUMºó½ô¸ú×Å³öÏÖ×ÖÄ¸»òÕßÏÂ»®Ïß'_'£¬Ôòµ±Ç°tokenÎª·Ç·¨±äÁ¿Ãû£¬Êä³ö·Ç·¨±äÁ¿Ãû²¢ÍË³ö
-			if(isalpha(t) || t == '_'){
-                printf("³öÏÖÁË·Ç·¨±äÁ¿Ãû\"%d",tokenval);
-                do{
-                    putc(t,stdout);
-                    t = getchar();
-                }
-                while(isalpha(t) || t == '_');
-                putc('\"',stdout);
-                exit(1);
-			}
-			//TKN_NUM»ñÈ¡³É¹¦
-			ungetc(t, stdin);
-			return TKN_NUM;
-		}
-		else if (isalpha(t) || t == '_') {
-            //tokenÊÇ±äÁ¿Ãû(TKN_ID)£¬»ñÈ¡±äÁ¿Ãû£¬È»ºó´æÈëchar *lexeme
-			i = 0;
-			do {
-				lexeme[i++] = t; t = getchar();
-			} while (isalpha(t) || isdigit(t) || t == '_');
-			lexeme[i] = '\0'; ungetc(t, stdin);
-			return TKN_ID;
-		}
-		else {
-		    //tokenÊÇÆäËûÖµ£¬±ÈÈç'+'¡¢'-'¡¢'*'¡¢'/'¡¢'('¡¢')'µÈ
-			tokenval = 0;
-			return t;
-		}
-	}
-}
-void Match(int t)
-{
-	if (LookAhead == t)
-        //Æ¥Åä³É¹¦£¬È»ºó¼ÌĞø»ñÈ¡ÏÂÒ»¸ötoken
-		LookAhead = GetToken();
-	else {
-        //Æ¥ÅäÊ§°Ü£¬¿ÉÄÜÊÇÏÂÁĞÔ­Òò
-        if(t == ')')
-            printf("\nÈ±ÉÙÓÒÀ¨ºÅ\n");
-        exit(1); //½áÊø³ÌĞò
-	}
+int GetToken() {
+    int t, i;
+    while (1) {
+        t = getchar();
+        // tokenæ˜¯ç©ºæ ¼æˆ–åˆ¶è¡¨ç¬¦ï¼Œå¿½ç•¥
+        if (t == ' ' || t == '\t')
+            ;
 
+        // tokenæ˜¯æ— ç¬¦å·æ•´æ•°(TKN_NUM)ï¼Œè·å–å®ƒå…·ä½“çš„å€¼ï¼Œç„¶åå­˜å…¥tokenval
+        else if (isdigit(t)) {
+            tokenval = 0;
+            do {
+                tokenval = tokenval * 10 + t - '0';
+                t = getchar();
+            } while (isdigit(t));
+
+            //åœ¨TKN_NUMåç´§è·Ÿç€å‡ºç°å­—æ¯æˆ–è€…ä¸‹åˆ’çº¿'_'ï¼Œåˆ™å½“å‰tokenä¸ºéæ³•å˜é‡åï¼Œè¾“å‡ºéæ³•å˜é‡åå¹¶é€€å‡º
+            if (isalpha(t) || t == '_') {
+                printf("å‡ºç°äº†éæ³•å˜é‡å\"%d", tokenval);
+                do {
+                    putc(t, stdout);
+                    t = getchar();
+                } while (isalpha(t) || t == '_');
+                putc('\"', stdout);
+                exit(1);
+            }
+
+            // TKN_NUMè·å–æˆåŠŸ
+            ungetc(t, stdin);
+            return TKN_NUM;
+        }
+
+        // tokenæ˜¯å˜é‡å(TKN_ID)ï¼Œè·å–å˜é‡åï¼Œç„¶åå­˜å…¥char *lexeme
+        else if (isalpha(t) || t == '_') {
+            i = 0;
+            do {
+                lexeme[i++] = t;
+                t = getchar();
+            } while (isalpha(t) || isdigit(t) || t == '_');
+            lexeme[i] = '\0';
+            ungetc(t, stdin);
+            return TKN_ID;
+        }
+
+        // tokenæ˜¯å…¶ä»–å€¼ï¼Œæ¯”å¦‚'+'ã€'-'ã€'*'ã€'/'ã€'('ã€')'ç­‰
+        else {
+            tokenval = 0;
+            return t;
+        }
+    }
+}
+void Match(int t) {
+    //åŒ¹é…æˆåŠŸï¼Œç„¶åç»§ç»­è·å–ä¸‹ä¸€ä¸ªtoken
+    if (LookAhead == t)
+        LookAhead = GetToken();
+
+    //åŒ¹é…å¤±è´¥ï¼Œå¯èƒ½æ˜¯ä¸‹åˆ—åŸå› 
+    else {
+        if (t == ')')
+            printf("\nç¼ºå°‘å³æ‹¬å·\n");
+        exit(1); //ç»“æŸç¨‹åº
+    }
 }
 void expr() {
-	term();
-	expr_rest();
+    term();
+    expr_rest();
 }
 
 void expr_rest() {
-	switch (LookAhead){
-	case '+':
-		Match('+');
-		term();
-		printf("+ ");
-		expr_rest();
-		break;
-	case '-':
-		Match('-');
-		term();
-		printf("- ");
-		expr_rest();
-		break;
-	default:
-		break;
-	}
-}
-
-void term() {
-	factor();
-	term_rest();
-}
-
-void term_rest() {
-	switch (LookAhead){
-	case '*':
-		Match('*');
-		factor();
-		printf("* ");
-		term_rest();
-		break;
-	case '/':
-		Match('/');
-		factor();
-		printf("/ ");
-		term_rest();
-		break;
-    case ')':
-        if(numOfleft <= 0){
-            //ÒÑ¾­Ã»ÓĞ×óÀ¨ºÅ¿ÉÒÔÆ¥ÅäÁË£¬ÕâÊÇ¶àÓàµÄÓÒÀ¨ºÅ
-            printf("\nÓĞ¶àÓàµÄÓÒÀ¨ºÅ\n");
-            exit(1);
-        }
-	default:
-		break;
-	}
-}
-
-void factor() {
-    switch(LookAhead){
-	case '(':
-        //factor --> ( expr )
-		Match('(');
-		numOfleft++;
-		printf("( ");
-		expr();
-		Match(')');
-		numOfleft--;
-		printf(") ");
-		break;
-	case TKN_ID:
-	    //factor --> ID
-		printf("%s ",lexeme);
-		Match(LookAhead);
-		break;
-	case TKN_NUM:
-	    //factor --> NUM
-		printf("%d ",tokenval);
-		Match(LookAhead);
-		break;
-	default:
-		printf("È±ÉÙ²Ù×÷Êı");
-		exit(1);
-		break;
+    switch (LookAhead) {
+    case '+':
+        Match('+');
+        term();
+        printf("+ ");
+        expr_rest();
+        break;
+    case '-':
+        Match('-');
+        term();
+        printf("- ");
+        expr_rest();
+        break;
+    default:
+        break;
     }
 }
 
-int main()
-{
-	printf("ÇëÊäÈë±í´ïÊ½£º\n");
-	LookAhead = GetToken();
-	printf("Æäºó×º±í´ïÊ½Îª£º\n");
-	expr();
-	return 0;
+void term() {
+    factor();
+    term_rest();
+}
+
+void term_rest() {
+    switch (LookAhead) {
+    case '*':
+        Match('*');
+        factor();
+        printf("* ");
+        term_rest();
+        break;
+    case '/':
+        Match('/');
+        factor();
+        printf("/ ");
+        term_rest();
+        break;
+    case ')':
+        //å·²ç»æ²¡æœ‰å·¦æ‹¬å·å¯ä»¥åŒ¹é…äº†ï¼Œè¿™æ˜¯å¤šä½™çš„å³æ‹¬å·
+        if (numOfleft <= 0) {
+            printf("\næœ‰å¤šä½™çš„å³æ‹¬å·\n");
+            exit(1);
+        }
+    default:
+        break;
+    }
+}
+
+void factor() {
+    switch (LookAhead) {
+    case '(':
+        // factor --> ( expr )
+        Match('(');
+        numOfleft++;
+        printf("( ");
+        expr();
+        Match(')');
+        numOfleft--;
+        printf(") ");
+        break;
+    case TKN_ID:
+        // factor --> ID
+        printf("%s ", lexeme);
+        Match(LookAhead);
+        break;
+    case TKN_NUM:
+        // factor --> NUM
+        printf("%d ", tokenval);
+        Match(LookAhead);
+        break;
+    default:
+        printf("ç¼ºå°‘æ“ä½œæ•°");
+        exit(1);
+        break;
+    }
+}
+
+int main() {
+    printf("è¯·è¾“å…¥è¡¨è¾¾å¼ï¼š\n");
+    LookAhead = GetToken();
+    printf("å…¶åç¼€è¡¨è¾¾å¼ä¸ºï¼š\n");
+    expr();
+    return 0;
 }

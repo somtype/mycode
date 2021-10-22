@@ -7,7 +7,7 @@
     "editor.fontSize": 16,
     "editor.detectIndentation": false,
     "terminal.integrated.fontSize": 15,
-    "clang-format.executable": "/usr/bin/clang-format-11",
+    "clang-format.executable": "/usr/bin/clang-format-12",
     "C_Cpp.clang_format_fallbackStyle": "LLVM",
     "C_Cpp.default.cppStandard": "c++17",
     "vim.useCtrlKeys": false,
