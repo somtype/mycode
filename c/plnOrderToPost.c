@@ -57,7 +57,7 @@ int GetToken() {
                 t = getchar();
             } while (isdigit(t));
 
-            //在TKN_NUM后紧跟着出现字母或者下划线'_'，则当前token为非法变量名，输出非法变量名并退出
+            // 在TKN_NUM后紧跟着出现字母或者下划线'_'，则当前token为非法变量名，输出非法变量名并退出
             if (isalpha(t) || t == '_') {
                 printf("出现了非法变量名\"%d", tokenval);
                 do {
@@ -69,8 +69,10 @@ int GetToken() {
             }
 
             // TKN_NUM获取成功
-            ungetc(t, stdin);
-            return TKN_NUM;
+            else {
+                ungetc(t, stdin);
+                return TKN_NUM;
+            }
         }
 
         // token是变量名(TKN_ID)，获取变量名，然后存入char *lexeme
@@ -105,54 +107,68 @@ void Match(int t) {
     }
 }
 void expr() {
+    // expr --> term expr_rest
     term();
     expr_rest();
 }
 
 void expr_rest() {
     switch (LookAhead) {
+    // expr_rest --> + term {print('+')} expr_rest
     case '+':
         Match('+');
         term();
         printf("+ ");
         expr_rest();
         break;
+
+    // expr_rest --> - term {print('-')} expr_rest
     case '-':
         Match('-');
         term();
         printf("- ");
         expr_rest();
         break;
+
+    // expr_rest --> 空
     default:
         break;
     }
 }
 
 void term() {
+    // term --> factor term_rest
     factor();
     term_rest();
 }
 
 void term_rest() {
     switch (LookAhead) {
+    // term_rest --> * factor {print('*')} term_rest
     case '*':
         Match('*');
         factor();
         printf("* ");
         term_rest();
         break;
+
+    // term_rest --> / factor {print('/')} term_rest
     case '/':
         Match('/');
         factor();
         printf("/ ");
         term_rest();
         break;
+
+    // 下个token是右括号，说明在生成factor之后多出了右括号
     case ')':
         //已经没有左括号可以匹配了，这是多余的右括号
         if (numOfleft <= 0) {
             printf("\n有多余的右括号\n");
             exit(1);
         }
+
+    // term_rest --> 空
     default:
         break;
     }
@@ -160,8 +176,8 @@ void term_rest() {
 
 void factor() {
     switch (LookAhead) {
+    // factor --> ( expr )
     case '(':
-        // factor --> ( expr )
         Match('(');
         numOfleft++;
         printf("( ");
@@ -170,16 +186,19 @@ void factor() {
         numOfleft--;
         printf(") ");
         break;
+
+    // factor --> ID
     case TKN_ID:
-        // factor --> ID
         printf("%s ", lexeme);
         Match(LookAhead);
         break;
+
+    // factor --> NUM
     case TKN_NUM:
-        // factor --> NUM
         printf("%d ", tokenval);
         Match(LookAhead);
         break;
+
     default:
         printf("缺少操作数");
         exit(1);
