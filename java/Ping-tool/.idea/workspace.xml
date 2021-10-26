@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="a96f0902-e7cd-4b0e-8c5d-7cdac7d8bd0a" name="变更" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -92,11 +95,11 @@
       </method>
     </configuration>
     <configuration name="PingClient" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.company.PingClient" />
+      <option name="MAIN_CLASS_NAME" value="PingClient" />
       <module name="Ping-tool" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.company.*" />
+          <option name="PATTERN" value=".*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>

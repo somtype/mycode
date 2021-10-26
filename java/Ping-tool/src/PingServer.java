@@ -1,10 +1,13 @@
-package com.company;
 import java.io.*;
 import java.net.*;
+import java.nio.ByteBuffer;
 import java.util.*;
 public class PingServer {
     private static final double LOSS_RATE = 0.3;
     private static final int AVERAGE_DELAY = 100; // milliseconds
+    private static short sequence_number = 0; //计数器，用于计算发送了多少个ping请求
+    private static long client_send_time = 0; //时间戳
+    private static String passwd = "123321";
 
     public static void main(String[] args) throws Exception {
         // Get command line argument.
@@ -47,11 +50,17 @@ public class PingServer {
             Thread.sleep((int)(random.nextDouble() * 2 * AVERAGE_DELAY));
 
             // Send reply.
+            client_send_time = System.currentTimeMillis();
+            byte[] buf = request.getData();
+            //获取sequence_number
+            ByteBuffer bb2 = ByteBuffer.wrap(buf, 4, Short.BYTES);
+            sequence_number = bb2.getShort();
+
             InetAddress clientHost = request.getAddress();
             int clientPort = request.getPort();
-            byte[] buf = request.getData();
+            byte[] message = getMessage();
             DatagramPacket reply =
-                    new DatagramPacket(buf, buf.length, clientHost, clientPort);
+                    new DatagramPacket(message, message.length, clientHost, clientPort);
 
             socket.send(reply);
 
@@ -93,4 +102,26 @@ public class PingServer {
                 request.getAddress().getHostAddress() + ": " +
                 new String(line));
     } // end of printData
+    private static  byte[] getMessage(){
+        byte[] sentence1 = {'E', 'C', 'H', '0', 'P', 'I', 'N', 'G'}; // PING byte[]
+        //生成计数器byte[]
+        ByteBuffer bb2 = ByteBuffer.allocate(Short.BYTES);
+        bb2.putShort(sequence_number);
+        byte[] sentence2 = bb2.array();
+        //生成时间戳byte[]
+        ByteBuffer bb3 = ByteBuffer.allocate(Long.BYTES);
+        bb3.putLong(client_send_time);
+        byte[] sentence3 = bb3.array();
+        byte[] sentence4 = passwd.getBytes(); //passwd byte[]
+        //生成总sentence byte[]
+        byte[] sentence = new byte[sentence1.length + sentence2.length + sentence3.length + sentence4.length + 2];
+        ByteBuffer bb = ByteBuffer.wrap(sentence);
+        bb.put(sentence1);
+        bb.put(sentence2);
+        bb.put(sentence3);
+        bb.put(sentence4);
+        bb.put(new byte[] {'\r', '\n'}); //CRLF
+        sentence = bb.array();
+        return sentence;
+    }
 }
