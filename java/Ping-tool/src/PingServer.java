@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.*;
 public class PingServer {
     private static final double LOSS_RATE = 0.3;
-    private static final int AVERAGE_DELAY = 100; // milliseconds
+    private static final int AVERAGE_DELAY = 0; // milliseconds
     private static short sequence_number = 0; //计数器，用于计算发送了多少个ping请求
     private static long client_send_time = 0; //时间戳
     private static String passwd = "123321";
@@ -13,7 +13,6 @@ public class PingServer {
         // Get command line argument.
         if (args.length != 1) {
             System.out.println("Required arguments: port");
-
             return;
         }
 
@@ -40,9 +39,17 @@ public class PingServer {
             // Print the received data, for debugging
             printData(request);
 
+            // 获取密码
+            byte[] buf = request.getData();
+            String pString = new String(buf, 4 + Short.BYTES + Long.BYTES, passwd.length());
+            if(!pString.equals(passwd)){
+                System.out.println(" Incorrect password!\n");
+                continue;
+            }
+
             // Decide whether to reply, or simulate packet loss.
             if (random.nextDouble() < LOSS_RATE) {
-                System.out.println(" Reply not sent.");
+                System.out.println(" Reply not sent.\n");
                 continue;
             }
 
@@ -51,20 +58,15 @@ public class PingServer {
 
             // Send reply.
             client_send_time = System.currentTimeMillis();
-            byte[] buf = request.getData();
-            //获取sequence_number
+            // 获取sequence_number
             ByteBuffer bb2 = ByteBuffer.wrap(buf, 4, Short.BYTES);
             sequence_number = bb2.getShort();
-
             InetAddress clientHost = request.getAddress();
             int clientPort = request.getPort();
             byte[] message = getMessage();
-            DatagramPacket reply =
-                    new DatagramPacket(message, message.length, clientHost, clientPort);
-
+            DatagramPacket reply = new DatagramPacket(message, message.length, clientHost, clientPort);
             socket.send(reply);
-
-            System.out.println(" Reply sent.");
+            System.out.println(" Reply sent. \n");
         } // end of while
     }     // end of main
 
@@ -103,7 +105,8 @@ public class PingServer {
                 new String(line));
     } // end of printData
     private static  byte[] getMessage(){
-        byte[] sentence1 = {'E', 'C', 'H', '0', 'P', 'I', 'N', 'G'}; // PING byte[]
+        // PING byte[]
+        byte[] sentence1 = {'E', 'C', 'H', '0', 'P', 'I', 'N', 'G'};
         //生成计数器byte[]
         ByteBuffer bb2 = ByteBuffer.allocate(Short.BYTES);
         bb2.putShort(sequence_number);
@@ -112,7 +115,8 @@ public class PingServer {
         ByteBuffer bb3 = ByteBuffer.allocate(Long.BYTES);
         bb3.putLong(client_send_time);
         byte[] sentence3 = bb3.array();
-        byte[] sentence4 = passwd.getBytes(); //passwd byte[]
+        //passwd byte[]
+        byte[] sentence4 = passwd.getBytes();
         //生成总sentence byte[]
         byte[] sentence = new byte[sentence1.length + sentence2.length + sentence3.length + sentence4.length + 2];
         ByteBuffer bb = ByteBuffer.wrap(sentence);
@@ -120,7 +124,8 @@ public class PingServer {
         bb.put(sentence2);
         bb.put(sentence3);
         bb.put(sentence4);
-        bb.put(new byte[] {'\r', '\n'}); //CRLF
+        //CRLF
+        bb.put(new byte[] {'\r', '\n'});
         sentence = bb.array();
         return sentence;
     }
