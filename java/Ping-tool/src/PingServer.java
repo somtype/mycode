@@ -1,22 +1,32 @@
+import com.sun.jdi.ShortType;
+
 import java.io.*;
 import java.net.*;
 import java.nio.ByteBuffer;
 import java.util.*;
 public class PingServer {
     private static final double LOSS_RATE = 0.3;
-    private static final int AVERAGE_DELAY = 0; // milliseconds
+    private static final int AVERAGE_DELAY = 100; // milliseconds
     private static short sequence_number = 0; //计数器，用于计算发送了多少个ping请求
     private static long client_send_time = 0; //时间戳
     private static String passwd = "123321";
 
     public static void main(String[] args) throws Exception {
         // Get command line argument.
-        if (args.length != 1) {
-            System.out.println("Required arguments: port");
+        if (args.length < 1) {
+            System.out.println("Required arguments: port password");
             return;
         }
-
+        else if(args.length < 2){
+            System.out.printf("Required arguments: password");
+            return;
+        }
         int port = Integer.parseInt(args[0]);
+        String strPass = args[1];
+        if (!strPass.equals(passwd)){
+            System.out.println("Incorrect password!");
+            return;
+        }
 
         // Create random number generator for use in simulating
         // packet loss and network delay.
@@ -78,31 +88,19 @@ public class PingServer {
     {
         // Obtain references to the packet's array of bytes.
         byte[] buf = request.getData();
+        String s1 = new String(buf,0,4);
+        ByteBuffer bb2 = ByteBuffer.wrap(buf, 4, Short.BYTES);
+        short snum = bb2.getShort();
+        ByteBuffer bb3 = ByteBuffer.wrap(buf, 4 + Short.BYTES, Long.BYTES);
+        long ctime = bb3.getLong();
 
-        // Wrap the bytes in a byte array input stream,
-        // so that you can read the data as a stream of bytes.
-        ByteArrayInputStream bais = new ByteArrayInputStream(buf);
-
-        // Wrap the byte array output stream in an input
-        // stream reader, so you can read the data as a
-        // stream of **characters**: reader/writer handles
-        // characters
-        InputStreamReader isr = new InputStreamReader(bais);
-
-        // Wrap the input stream reader in a bufferred reader,
-        // so you can read the character data a line at a time.
-        // (A line is a sequence of chars terminated by any
-        // combination of \r and \n.)
-        BufferedReader br = new BufferedReader(isr);
-
-        // The message data is contained in a single line,
-        // so read this line.
-        String line = br.readLine();
-
-        // Print host address and data received from it.
-        System.out.println("Received from " +
+        System.out.print("Received from " +
                 request.getAddress().getHostAddress() + ": " +
-                new String(line));
+                s1 + " " + snum + " " + ctime + " ");
+        for(int i = 4 + Short.BYTES + Long.BYTES; buf[i] != '\r'; i++){
+            System.out.print((char)buf[i]);
+        }
+        System.out.println();
     } // end of printData
     private static  byte[] getMessage(){
         // PING byte[]

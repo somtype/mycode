@@ -37,7 +37,7 @@ public class PingClient {
                     byte[] message = getMessage();
                     DatagramPacket packet = new DatagramPacket(message, message.length, serverHost, serverPort);
                     clientSocket.send(packet);
-                    System.out.println(" Packet sent");
+                    System.out.println("Packet sent: " + "PING " + sequence_number + " " + client_send_time + " " + passwd);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
@@ -47,6 +47,11 @@ public class PingClient {
                 try {
                     DatagramPacket reply = new DatagramPacket(new byte[1024], 1024);
                     clientSocket.receive(reply);
+                    try {
+                        printData(reply);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     byte[] buf = reply.getData();
                     //获取回复包的时间
                     ByteBuffer bb = ByteBuffer.wrap(buf, 8 + Short.BYTES, Long.BYTES);
@@ -71,6 +76,22 @@ public class PingClient {
         }//End of MyTimeTask
         timer.schedule(new MyTimerTask(), 0, 1000);
     }//End of main
+
+    private static void printData(DatagramPacket request) throws Exception {
+        // Obtain references to the packet's array of bytes.
+        byte[] buf = request.getData();
+        String s1 = new String(buf,0,8);
+        ByteBuffer bb2 = ByteBuffer.wrap(buf, 8, Short.BYTES);
+        short snum = bb2.getShort();
+        ByteBuffer bb3 = ByteBuffer.wrap(buf, 8 + Short.BYTES, Long.BYTES);
+        long ctime = bb3.getLong();
+
+        System.out.print("  Reply: " + s1 + " " + snum + " " + ctime + " ");
+        for(int i = 8 + Short.BYTES + Long.BYTES; buf[i] != '\r'; i++){
+            System.out.print((char)buf[i]);
+        }
+        System.out.println();
+    } // end of printData
 
     private static byte[] getMessage() {
         //PING byte[]
