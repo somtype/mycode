@@ -211,5 +211,6 @@ int main() {
     LookAhead = GetToken();
     printf("其后缀表达式为：\n");
     expr();
+    putc('\n', stdout);
     return 0;
 }
