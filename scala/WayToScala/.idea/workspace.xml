@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="4ff7a694-a8b5-41a2-9260-21351a54aeaf" name="变更" comment="" />
+    <list default="true" id="4ff7a694-a8b5-41a2-9260-21351a54aeaf" name="变更" comment="">
+      <change beforePath="$PROJECT_DIR$/../../java/Ping-tool/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../java/Ping-tool/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WayToScala.iml" beforeDir="false" afterPath="$PROJECT_DIR$/WayToScala.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Day01/_05ClassDemo.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/Day01/_05ClassDemo.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Day01/_07ClassDemo.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/Day01/_07ClassDemo.scala" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,10 +19,14 @@
   <component name="CodeStyleSettingsInfer">
     <option name="done" value="true" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="2" />
   </component>
   <component name="ProjectId" id="1zrtRieoPDPYihJAt8MtEHhMg3s" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -21,15 +34,55 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
-    <property name="project.structure.last.edited" value="模块" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="project.structure.last.edited" value="库" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\mycode\scala\WayToScala\src" />
     </key>
+  </component>
+  <component name="RunManager" selected="应用程序._08ClassDemo">
+    <configuration name="_07ClassDemo" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="Day01._07ClassDemo" />
+      <module name="WayToScala" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Day01.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="_08ClassDemo" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="Day01._08ClassDemo" />
+      <module name="WayToScala" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Day01.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="应用程序._08ClassDemo" />
+        <item itemvalue="应用程序._07ClassDemo" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -39,7 +92,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1634918029172</updated>
+      <workItem from="1635438098993" duration="217000" />
+      <workItem from="1635482433341" duration="896000" />
+      <workItem from="1635559012392" duration="69000" />
+      <workItem from="1635559121362" duration="1802000" />
+      <workItem from="1635575667181" duration="624000" />
+      <workItem from="1635778966173" duration="595000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>

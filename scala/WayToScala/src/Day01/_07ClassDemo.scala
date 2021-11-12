@@ -12,7 +12,7 @@ object _07ClassDemo {
 
   def main(args: Array[String]): Unit = {
     val person01 = new Person("范雨茹", 20, "20011229")
-    val person02 = new Person("邹鹏飞", 21, "20001123", "范雨茹wanted")
+    val person02 = new Person("邹鹏飞", 21, "20001123", "want 范雨茹")
     val person03 = new Person()
 
     person01.printInfo()

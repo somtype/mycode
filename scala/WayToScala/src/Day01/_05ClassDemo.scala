@@ -1,7 +1,5 @@
 package Day01
 
-import com.itheima.scala.oop._01ClassDemo.Person
-
 object _05ClassDemo {
   class Customer{
     var name:String = ""
