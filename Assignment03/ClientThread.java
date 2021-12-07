@@ -3,17 +3,17 @@ import java.util.*;
 import java.net.*;
 
 public class ClientThread implements Runnable {
-    private List<String> fileList = null;
-    private String filename = null;
-    Socket socket = null;
-    static long totalBytes = 0;
+    static long totalBytes = 0; //接收到的字符总数
+    private InetAddress server;
+    private int port;
+    private List<String> fileList;
+    private String filename;
+    Socket socket;
 
     public ClientThread(InetAddress server, int port, List<String> fileList) {
-        try {
-            this.socket = new Socket(server, port);
-            this.fileList = fileList;
-        } catch (Exception e) {
-        }
+        this.server = server;
+        this.port = port;
+        this.fileList = fileList;
     }
 
     @Override
@@ -30,6 +30,7 @@ public class ClientThread implements Runnable {
                 fileList.add(filename);//处理好这个文件后再加入，等待下一次处理
             }
             try {
+                socket = new Socket(server, port);
                 MakeRequest();
             } catch (Exception e) {
             }
@@ -50,6 +51,7 @@ public class ClientThread implements Runnable {
             inFromServer.readLine(); // Set-Cookie
             line = inFromServer.readLine(); // Content-Length
             int currBytes = Integer.parseInt(line.split("\\s")[1]);
+            System.out.println(currBytes);
             for (int i = 0; i < currBytes; i++) {
                 inFromServer.read();
             }
@@ -57,6 +59,7 @@ public class ClientThread implements Runnable {
                 totalBytes += currBytes;
             }
         } else {
+            System.out.println("Fail to reach file " + filename);
             return;
         }
     }

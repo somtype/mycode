@@ -11,7 +11,7 @@ class WebServer {
 
     public static int serverPort = 4165;
     // public static String WWW_ROOT = "/home/httpd/html/zoo/classes/cs433/";
-    public static String WWW_ROOT = "~/http/";
+    public static String WWW_ROOT = "/home/somtype/http/";
     private ServerSocket welcomeSocket;
     private List<Socket> connSockPool;
     private WebRequestHandler[] threads;
@@ -48,14 +48,12 @@ class WebServer {
     void run() {
         while (true) {
             try {
-                // take a ready connection from the accepted queue
                 Socket connectionSocket = welcomeSocket.accept();
-                // process a request
                 synchronized (connSockPool) {
                     connSockPool.add(connectionSocket);
+                    //唤醒线程处理请求
+                    connSockPool.notifyAll();
                 }
-                //唤醒线程处理请求
-                connSockPool.notifyAll();
             } catch (Exception e) {
             }
         } // end of while (true)

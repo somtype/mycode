@@ -9,7 +9,6 @@ import java.util.*;
 
 class WebRequestHandler implements Runnable {
     static int reqCount = 0;
-
     String WWW_ROOT;
     private List<Socket> connSockPool;
     Socket connSocket;
@@ -34,7 +33,7 @@ class WebRequestHandler implements Runnable {
                     } catch (InterruptedException e) {
                     }
                 }
-                this.connSocket = connSockPool.remove(0);
+                connSocket = connSockPool.remove(0);
             }
             try {
                 inFromClient = new BufferedReader(new InputStreamReader(connSocket.getInputStream()));
@@ -44,7 +43,7 @@ class WebRequestHandler implements Runnable {
                 {
                     outputResponseHeader();
                     outputResponseBody();
-                } // dod not handle error
+                } // do not handle error
                 connSocket.close();
             } catch (Exception e) {
             }

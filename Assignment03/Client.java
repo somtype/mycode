@@ -14,7 +14,7 @@ public class Client {
     private ClientThread[] threads; // 线程池
 
     public Client(int serverPort, int threadsNum, List<String> fileList) {
-        // 生成线程池，每个线程维持一个TCP连接
+        // 生成线程池
         threads = new ClientThread[threadsNum];
         for (int i = 0; i < threadsNum; i++) {
             threads[i] = new ClientThread(server, serverPort, fileList);
