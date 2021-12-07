@@ -2,7 +2,7 @@
     "workbench.sideBar.location": "right",
     "editor.acceptSuggestionOnEnter": "off",
     "editor.formatOnSave": true,
-    "editor.formatOnType": true,
+    //"editor.formatOnType": true,
     "editor.fontFamily": "Fira Code",
     "editor.fontSize": 16,
     "editor.detectIndentation": false,

@@ -1,14 +1,17 @@
+
 /**
  * * XMU CNNS Class Demo Basic Web Server
  **/
 
 import java.io.*;
 import java.net.*;
+import java.util.*;
 
 class WebRequestHandler implements Runnable {
     static int reqCount = 0;
 
     String WWW_ROOT;
+    private List<Socket> connSockPool;
     Socket connSocket;
     BufferedReader inFromClient;
     DataOutputStream outToClient;
@@ -17,37 +20,36 @@ class WebRequestHandler implements Runnable {
     String fileName;
     File fileInfo;
 
-    public WebRequestHandler(Socket connectionSocket,
-                             String WWW_ROOT) throws Exception {
+    public WebRequestHandler(List<Socket> connSockPool, String WWW_ROOT){
         this.WWW_ROOT = WWW_ROOT;
-        this.connSocket = connectionSocket;
-
-        inFromClient =
-                new BufferedReader(new InputStreamReader(connSocket.getInputStream()));
-
-        outToClient =
-                new DataOutputStream(connSocket.getOutputStream());
-
+        this.connSockPool = connSockPool;
     }
 
-    public void run() {
-
-        try {
-            mapURL2File();
-
-            if (fileInfo != null) // found the file and knows its info
-            {
-                outputResponseHeader();
-                outputResponseBody();
-            } // dod not handle error
-
-            connSocket.close();
-        } catch (Exception e) {
-            outputError(400, "Server error");
+    public void run(){
+        while (true) {
+            synchronized (connSockPool) {
+                while (connSockPool.isEmpty()) {
+                    try {
+                        connSockPool.wait();
+                    } catch (InterruptedException e) {
+                    }
+                }
+                this.connSocket = connSockPool.remove(0);
+            }
+            try {
+                inFromClient = new BufferedReader(new InputStreamReader(connSocket.getInputStream()));
+                outToClient = new DataOutputStream(connSocket.getOutputStream());
+                mapURL2File();
+                if (fileInfo != null) // found the file and knows its info
+                {
+                    outputResponseHeader();
+                    outputResponseBody();
+                } // dod not handle error
+                connSocket.close();
+            } catch (Exception e) {
+            }
         }
-
-
-    } // end of processARequest
+    }
 
     private void mapURL2File() throws Exception {
         String requestMessageLine = inFromClient.readLine();
@@ -68,8 +70,8 @@ class WebRequestHandler implements Runnable {
             outputError(404, "Not Found");
             fileInfo = null;
         }
-        synchronized (this.getClass()) {
-            // 输出信息锁，不影响处理请求
+        synchronized (WebRequestHandler.class) {
+            // 输出信息锁，防止输出信息乱序
             System.out.println("\nReceive request from " + connSocket);
             reqCount++;
             System.out.println("Request " + reqCount + ": " + requestMessageLine);
@@ -82,7 +84,6 @@ class WebRequestHandler implements Runnable {
         }
 
     } // end mapURL2file
-
 
     private void outputResponseHeader() throws Exception {
         outToClient.writeBytes("HTTP/1.0 200 Document Follows\r\n");
