@@ -55,3 +55,17 @@
 #define FACTOR 	12
 
 extern YYSTYPE yylval;
+
+void program();
+void block();
+void decls();
+void decl();
+void type();
+void stmts();
+void stmt();
+void bool_();
+void expr();
+void expr_res();
+void term();
+void term_res();
+void factor();

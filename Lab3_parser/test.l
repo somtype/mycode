@@ -66,7 +66,6 @@ basic		      int|char|bool|float
 "}"		{return (BRS_R);}
 ";"		{return (SMCL);}
 "."		{return ('.');}
-.        {printf("Unknown : %s\n",yytext);}
 %%
 
 

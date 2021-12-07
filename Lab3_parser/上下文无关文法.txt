@@ -11,11 +11,12 @@ stmt	->	id = expr ;
             | do stmt while ( bool ) ;
             | break ;
             | block
-bool	->	expr < expr
-            | expr <= expr
-            | expr > expr
-            | expr >= expr
-            | expr
+bool    ->  expr bool_res
+bool_res->	< expr
+            | <= expr
+            | > expr
+            | >= expr
+            | nul
 expr 	-> 	term expr_res
 expr_res->	+ term expr_res
             | - term expr_res

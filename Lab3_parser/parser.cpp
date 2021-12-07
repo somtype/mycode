@@ -1,9 +1,7 @@
 #include "lex.yy.c"
 #include <iostream>
-#include <vector>
 #define MAXN 50
 using namespace std;
-int map[MAXN][MAXN];
 int lookahead;
 int main() {
   string filename;
@@ -12,24 +10,10 @@ int main() {
   BeginCompileOneFile(filename.c_str());
   //当flex扫描到文件末尾，yylex函数返回0
   lookahead = yylex();
-  Program();
+  program();
   EndCompileOneFile();
   return 0;
 }
-
-void program();
-void block();
-void decls();
-void decl();
-void type();
-void stmts();
-void stmt();
-void bool_();
-void expr();
-void expr_res();
-void term();
-void term_res();
-void factor();
 
 void error() { cout << "无法匹配" << endl; }
 
@@ -42,47 +26,47 @@ void match(int TokenID) {
   }
 }
 
-void Program() {
-  cout << "Program -> Block\n" << endl;
-  Block();
+void program() {
+  cout << "Program -> Block" << endl;
+  block();
 }
 
-void Block() {
+void block() {
   cout << "Block -> { decls stmts }" << endl;
-  match('{');
+  match(BRS_L);
   decls();
   stmts();
-  match('}');
+  match(BRS_R);
 }
 
 void decls() {
-  int extend = map[DECLS][lookahead];
-  if (extend == 1) {
+  if (lookahead == INT || lookahead == FLOAT || lookahead == CHAR) {
     cout << "decls -> decl decls" << endl;
     decl();
     decls();
-  } else if (extend == 2) {
+  } else if (lookahead == ID || lookahead == IF || lookahead == WHILE ||
+             lookahead == DO || lookahead == BREAK || lookahead == BRS_L) {
     cout << "decls -> nul" << endl;
-    return;
   } else {
     error();
   }
 }
 
 void decl() {
+  cout << "decl -> type id ;" << endl;
   type();
   match(ID);
+  match(SMCL);
 }
 
 void type() {
-  int extend = map[TYPE][lookahead];
-  if (extend == 1) {
+  if (lookahead == INT) {
     cout << "type -> int" << endl;
     match(INT);
-  } else if (extend == 2) {
+  } else if (lookahead == FLOAT) {
     cout << "type -> float" << endl;
     match(FLOAT);
-  } else if (extend == 3) {
+  } else if (lookahead == CHAR) {
     cout << "type -> char" << endl;
     match(CHAR);
   } else {
@@ -91,12 +75,12 @@ void type() {
 }
 
 void stmts() {
-  int extend = map[STMTS][lookahead];
-  if (extend == 1) {
-    cout << "stmts ->  stmt stmts" << endl;
+  if (lookahead == ID || lookahead == IF || lookahead == WHILE ||
+      lookahead == DO || lookahead == BREAK || lookahead == BRS_L) {
+    cout << "stmts -> stmt stmts" << endl;
     stmt();
     stmts();
-  } else if (extend == 2) {
+  } else if (lookahead == BRS_R) {
     cout << "stmts -> nul" << endl;
     return;
   } else {
@@ -105,14 +89,13 @@ void stmts() {
 }
 
 void stmt() {
-  int extend = map[STMT][lookahead];
-  if (extend == 1) {
+  if (lookahead == ID) {
     cout << "stmt -> id = expr ;" << endl;
     match(ID);
     match(OP_ASSIGN);
     expr();
     match(SMCL);
-  } else if (extend == 2) {
+  } else if (lookahead == IF) {
     cout << "stmt -> if ( bool ) stmt";
     match(IF);
     match(PRTHS_L);
@@ -125,14 +108,14 @@ void stmt() {
       stmt();
     }
     cout << endl;
-  } else if (extend == 3) {
-    cout << "while ( bool ) stmt" << endl;
+  } else if (lookahead == WHILE) {
+    cout << "stmt -> while ( bool ) stmt" << endl;
     match(WHILE);
     match(PRTHS_L);
     bool_();
     match(PRTHS_R);
     stmt();
-  } else if (extend == 4) {
+  } else if (lookahead == DO) {
     cout << "stmt -> do stmt while ( bool ) ;" << endl;
     match(DO);
     stmt();
@@ -141,11 +124,11 @@ void stmt() {
     bool_();
     match(PRTHS_R);
     match(SMCL);
-  } else if (extend == 5) {
+  } else if (lookahead == BREAK) {
     cout << "stmt -> break;" << endl;
     match(BREAK);
     match(SMCL);
-  } else if (extend == 6) {
+  } else if (lookahead == BRS_L) {
     cout << "stmt -> block" << endl;
     block();
   } else {
@@ -153,27 +136,26 @@ void stmt() {
   }
 }
 void bool_() {
+  cout << "bool -> expr bool_res" << endl;
   expr();
-  int extend = map[BOOL][lookahead];
-  if (extend == 1) {
-    cout << "bool -> expr < expr" << endl;
+  if (lookahead == RELOP_LT) {
+    cout << "bool_res -> < expr" << endl;
     match(RELOP_LT);
     expr();
-  } else if (extend == 2) {
-    cout << "bool -> expr <= expr" << endl;
+  } else if (lookahead == RELOP_LE) {
+    cout << "bool_res -> <= expr" << endl;
     match(RELOP_LE);
     expr();
-  } else if (extend == 3) {
-    cout << "bool -> expr > expr" << endl;
+  } else if (lookahead == RELOP_GT) {
+    cout << "bool_res -> > expr" << endl;
     match(RELOP_GT);
     expr();
-  } else if (extend == 4) {
-    cout << "bool -> expr >= expr" << endl;
+  } else if (lookahead == RELOP_GE) {
+    cout << "bool_res -> >= expr" << endl;
     match(RELOP_GE);
     expr();
-  } else if (extend == 5) {
-    cout << "bool -> expr";
-    return;
+  } else if (lookahead == PRTHS_R) {
+    cout << "bool_res -> nul";
   } else {
     error();
   }
@@ -186,20 +168,20 @@ void expr() {
 }
 
 void expr_res() {
-  int extend = map[EXPR_RES][lookahead];
-  if (extend == 1) {
+  if (lookahead == OP_ADD) {
     cout << "expr_res -> + term expr_res" << endl;
     match(OP_ADD);
     term();
     expr_res();
-  } else if (extend == 2) {
+  } else if (lookahead == OP_SUB) {
     cout << "expr_res -> - term expr_res" << endl;
     match(OP_SUB);
     term();
     expr_res();
-  } else if (extend == 3) {
+  } else if (lookahead == RELOP_LT || lookahead == RELOP_LE ||
+             lookahead == RELOP_GT || RELOP_GE || lookahead == PRTHS_R ||
+             lookahead == SMCL) {
     cout << "expr_res -> nul" << endl;
-    return;
   } else {
     error();
   }
@@ -212,40 +194,39 @@ void term() {
 }
 
 void term_res() {
-  int extend = map[TERM_RES][lookahead];
-  if (extend == 1) {
+  if (lookahead == OP_MUL) {
     cout << "term_res -> * factor term_res" << endl;
     match(OP_MUL);
     factor();
     term_res();
-  } else if (extend == 2) {
+  } else if (lookahead == OP_DIV) {
     cout << "term_res -> / factor term_res" << endl;
     match(OP_DIV);
     factor();
     term_res();
-  } else if (extend == 3) {
+  } else if (lookahead == OP_ADD || lookahead == OP_SUB ||
+             lookahead == RELOP_LT || lookahead == RELOP_LE ||
+             lookahead == RELOP_GT || RELOP_GE || lookahead == PRTHS_R ||
+             lookahead == SMCL) {
     cout << "term_res -> nul" << endl;
-    return;
   } else {
     error();
   }
 }
 
 void factor() {
-  int extend = map[FACTOR][lookahead];
-  if (extend == 1) {
+  if (lookahead ==  PRTHS_L) {
     cout << "factor -> ( expr )" << endl;
     match(PRTHS_L);
     expr();
     match(PRTHS_R);
-  } else if (extend == 2) {
+  } else if (lookahead == ID) {
     cout << "factor -> id" << endl;
     match(ID);
-  } else if (extend == 3) {
+  } else if (lookahead == NUMBER) {
     cout << "factor -> num" << endl;
     match(NUMBER);
   } else {
     error();
   }
 }
-
