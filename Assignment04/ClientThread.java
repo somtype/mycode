@@ -51,7 +51,6 @@ public class ClientThread implements Runnable {
             inFromServer.readLine(); // Set-Cookie
             line = inFromServer.readLine(); // Content-Length
             int currBytes = Integer.parseInt(line.split("\\s")[1]);
-            System.out.println(currBytes);
             for (int i = 0; i < currBytes; i++) {
                 inFromServer.read();
             }
