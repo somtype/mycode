@@ -1,0 +1,6 @@
+Host github.com
+	IdentityFile ~/.ssh/STofEcdsa
+Host myserver
+	HostName 81.69.218.122
+	User somtype
+	IdentityFile ~/.ssh/STofEcdsa
