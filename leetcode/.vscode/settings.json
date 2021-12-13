@@ -8,5 +8,4 @@
     "editor.detectIndentation": false,
     "terminal.integrated.fontSize": 15,
     "clang-format.executable": "/usr/bin/clang-format-12",
-    "vim.useCtrlKeys": false,
 }
