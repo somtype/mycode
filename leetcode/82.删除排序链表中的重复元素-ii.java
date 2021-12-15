@@ -21,21 +21,19 @@ class Solution {
         ListNode preHead = new ListNode(0);
         preHead.next = head;
         ListNode ptr = preHead;
-        while(ptr.next != null){
+        while (ptr.next != null) {
             hashMap[ptr.next.val + 100]++;
             ptr = ptr.next;
-        } 
+        }
         ptr = preHead;
-        while(ptr.next != null){
-            if(hashMap[ptr.next.val + 100] > 1){
+        while (ptr.next != null) {
+            if (hashMap[ptr.next.val + 100] > 1) {
                 ptr.next = ptr.next.next;
-            }
-            else{
+            } else {
                 ptr = ptr.next;
             }
-        } 
+        }
         return preHead.next;
     }
 }
 // @lc code=end
-

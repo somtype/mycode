@@ -17,13 +17,13 @@
  */
 class Solution {
     public ListNode deleteDuplicates(ListNode head) {
-        if(head == null) return null;
+        if (head == null)
+            return null;
         ListNode ptr = head;
-        while(ptr.next != null){
-            if(ptr.next.val == ptr.val){
+        while (ptr.next != null) {
+            if (ptr.next.val == ptr.val) {
                 ptr.next = ptr.next.next;
-            }
-            else{
+            } else {
                 ptr = ptr.next;
             }
         }
@@ -31,4 +31,3 @@ class Solution {
     }
 }
 // @lc code=end
-

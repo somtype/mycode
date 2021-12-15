@@ -21,13 +21,12 @@ class Solution {
         preHead.next = head;
         ListNode newPreHead = new ListNode();
         ListNode ptr = preHead, node = newPreHead;
-        while(ptr.next != null){
-            if(ptr.next.val < x){
+        while (ptr.next != null) {
+            if (ptr.next.val < x) {
                 node.next = new ListNode(ptr.next.val);
                 node = node.next;
                 ptr.next = ptr.next.next;
-            }
-            else{
+            } else {
                 ptr = ptr.next;
             }
         }
@@ -36,4 +35,3 @@ class Solution {
     }
 }
 // @lc code=end
-

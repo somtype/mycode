@@ -24,27 +24,24 @@ class Solution {
         backNode = frontNode = null;
         ListNode[] node = new ListNode[right - left + 1];
         int index = 0, i = 0;
-        while(ptr != null){
-            if(index == left - 1){
+        while (ptr != null) {
+            if (index == left - 1) {
                 backNode = ptr;
-            }
-            else if(index == right + 1){
+            } else if (index == right + 1) {
                 frontNode = ptr;
-            }
-            else if(index >= left && index <= right){
+            } else if (index >= left && index <= right) {
                 node[i] = ptr;
-                i ++;
+                i++;
             }
             ptr = ptr.next;
-            index ++;
+            index++;
         }
         backNode.next = node[right - left];
         node[0].next = frontNode;
-        for(int j = right - left; j >= 1; j --){
-            node[j].next = node[j-1];
+        for (int j = right - left; j >= 1; j--) {
+            node[j].next = node[j - 1];
         }
         return preHead.next;
     }
 }
 // @lc code=end
-
