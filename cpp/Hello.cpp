@@ -2,6 +2,6 @@
 #include <iostream>
 using namespace std;
 int main() {
-    cout << "Hello World\32abccc\n";
+	cout << "Hello coc-langd" << endl;
     return 0;
 }
