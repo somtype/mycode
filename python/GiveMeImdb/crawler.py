@@ -1,27 +1,30 @@
 import requests
 from bs4 import BeautifulSoup
 
+
 def DEBUG(content):
     print(content)
 
-def getPicture(fileName):
+
+def get_picture(file_name):
     url = "https://www.imdb.com"
-    searchPath = url + "/find?q=" + fileName + "&s=tt&ttype=ft&ref_=fn_ft"
-    searchResult = requests.get(searchPath)
-    searchResult.encoding = "UTF-8"
-    searchResult = BeautifulSoup(searchResult.content, "lxml")
+    search_path = url + "/find?q=" + file_name + "&s=tt&ttype=ft&ref_=fn_ft"
+    search_result = requests.get(search_path)
+    search_result.encoding = "UTF-8"
+    search_result = BeautifulSoup(search_result.content, "lxml")
 
-    findList = searchResult.find(name="table", attrs={"class": "findList"})
-    findResult = findList.find(attrs={"class": "findResult odd"})
-    resultUrl = findResult.find(name="a").get("href")
-    resultUrl = url + resultUrl + "?ref_=fn_tt_tt_1"
+    find_list = search_result.find(name="table", attrs={"class": "findList"})
+    find_result = find_list.find(attrs={"class": "findResult odd"})
+    result_url = find_result.find(name="a").get("href")
+    result_url = url + result_url + "?ref_=fn_tt_tt_1"
 
-    filmPage = requests.get(resultUrl)
-    filmPage.encoding = "UTF-8"
-    filmPage = BeautifulSoup(filmPage.content, "lxml")
-    imagePath = filmPage.find(name="a", attrs={"class": "ipc-lockup-overlay ipc-focusable"}).get("href")
-    imagePath = url + imagePath
+    film_page = requests.get(result_url)
+    film_page.encoding = "UTF-8"
+    film_page = BeautifulSoup(film_page.content, "lxml")
+    image_path = film_page.find(name="a", attrs={"class": "ipc-lockup-overlay ipc-focusable"}).get("href")
+    image_path = url + image_path
+
+    DEBUG(image_path)
 
 
-    DEBUG(imagePath)
-getPicture("Iron Man")
+get_picture("Iron Man")
