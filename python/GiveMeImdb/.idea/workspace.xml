@@ -5,10 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="317e3967-f74d-4951-b252-5558b0114a91" name="变更" comment="变更">
+      <change afterPath="$PROJECT_DIR$/../各种图.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/GiveMeImdb.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/GiveMeImdb.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crawler.py" beforeDir="false" afterPath="$PROJECT_DIR$/crawler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../九九乘法表.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../散点图.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../水果销量堆叠条形图.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../水果销量并列条形图.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../水果销量饼状图.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,9 +41,9 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.crawler">
+  <component name="RunManager" selected="Python.main">
     <configuration name="crawler" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="GiveMeImdb" />
       <option name="INTERPRETER_OPTIONS" value="" />
