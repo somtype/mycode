@@ -1,8 +1,15 @@
 #include <stdio.h>
 int main() {
-    int a[2] = {0, 1};
-    int *p = a;
-    printf("%d\n", *p++);
-    printf("%d\n", *p);
+	int f(int a, int b);
+	int i = 2, p;
+	p = f(i, ++i);
+	printf("%d\n", p);
+	return 0;
 }
-int detectBits(int x) { return !(x & 2863311530 ^ 2863311530); }
+int f(int a, int b){
+	int c;
+	if(a > b) c = 1;
+	else if(a == b) c = 0;
+	else c = -1;
+	return c;
+}
