@@ -3,6 +3,7 @@
 331
 231
 多行注释
+
 name=fyr
 readonly fyr #设置只读
 declare -r name #设置只读
